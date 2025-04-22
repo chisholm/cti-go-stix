@@ -16,17 +16,53 @@ OASIS Go STIX API: a repository containing the MVP implementation of Go STIX API
 
 ## Simple Usage
 
-A STIX object is a Go map.  The type is named `STIXObject` and is based on
-a `map[string]any`.  To invoke validation from another map, one can call
+A STIX object is a Go map.  The Go type is named `STIXObject` and is based
+on a `map[string]any`.  To invoke validation from another map, one can call
 `STIXObject.FromMap()`:
 
 ```go
-var obj STIXObject
-err := obj.FromMap(stixData)
+var indicator STIXObject
+err := indicator.FromMap(map[string]any{
+    "type": "indicator",
+    "name": "File hash for malware variant",
+    "indicator_types": []any{"malicious-activity"},
+    "pattern_type": "stix",
+    "pattern": "[file:hashes.md5 = 'd41d8cd98f00b204e9800998ecf8427e']",
+    "valid_from": "2014-08-25T15:00:07.527004Z",
+})
 ```
 
-This will populate the `obj` map with validated/cleaned content from
-`stixData`.
+This will populate the `indicator` map with validated/cleaned content from
+the given map data.  There are some STIX object initialization conveniences,
+for example a STIX ID is created automatically with a UUIDv4 (or a
+deterministic ID for SCOs with ID contributing properties), and versioning
+properties are added in objects of versionable types, with the current
+timestamp.  So it is okay to omit them in the map above.
+
+Creating a `STIXObject` from JSON will automatically invoke
+cleaning/validation:
+
+```go
+// assuming import "encoding/json"
+var indicator STIXObject
+err := json.Unmarshal([]byte(
+    `{
+        "type": "indicator",
+        "spec_version": "2.1",
+        "id": "indicator--dbcbd659-c927-4f9a-994f-0a2632274394",
+        "created": "2017-09-26T23:33:39.829Z",
+        "modified": "2017-09-26T23:33:39.829Z",
+        "name": "File hash for malware variant",
+        "indicator_types": [
+            "malicious-activity"
+        ],
+        "pattern_type": "stix",
+        "pattern_version": "2.1",
+        "pattern": "[file:hashes.md5 ='d41d8cd98f00b204e9800998ecf8427e']",
+        "valid_from": "2017-09-26T23:33:39.829952Z"
+    }`,
+), &indicator)
+```
 
 Being a map, the Go standard library already knows how to serialize it to
 a JSON object.  Instances of special types which the cleaning process puts
@@ -35,16 +71,7 @@ So one can dump to JSON using standard APIs as usual:
 
 ```go
 // assuming import "encoding/json"
-jsonBytes, err := json.Marshal(obj)
-```
-
-Creating a `STIXObject` from JSON will automatically invoke
-cleaning/validation:
-
-```go
-// assuming import "encoding/json"
-var obj STIXObject
-err := json.Unmarshal(jsonBytes, &obj)
+jsonBytes, err := json.Marshal(indicator)
 ```
 
 ### Extensions and Custom Content
