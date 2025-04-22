@@ -14,6 +14,53 @@ As documented in [CONTRIBUTING](https://github.com/oasis-open/cti-go-stix/blob/m
 
 OASIS Go STIX API: a repository containing the MVP implementation of Go STIX APIs
 
+## Simple Usage
+
+A STIX object is a Go map.  The type is named `STIXObject` and is based on
+a `map[string]any`.  To invoke validation from another map, one can call
+`STIXObject.FromMap()`:
+
+```go
+var obj STIXObject
+err := obj.FromMap(stixData)
+```
+
+This will populate the `obj` map with validated/cleaned content from
+`stixData`.
+
+Being a map, the Go standard library already knows how to serialize it to
+a JSON object.  Instances of special types which the cleaning process puts
+into the map have custom JSON serialization included with this library.
+So one can dump to JSON using standard APIs as usual:
+
+```go
+// assuming import "encoding/json"
+jsonBytes, err := json.Marshal(obj)
+```
+
+Creating a `STIXObject` from JSON will automatically invoke
+cleaning/validation:
+
+```go
+// assuming import "encoding/json"
+var obj STIXObject
+err := json.Unmarshal(jsonBytes, &obj)
+```
+
+### Extensions and Custom Content
+
+STIX 2.0 style "custom" content is not supported.  This means that it is
+not possible to add arbitrary custom top-level properties to a registered
+object type, in the absence of a toplevel property extension.  Additional
+2.0 style markings can't be registered (tlp 1.0 and statement markings are
+supported).  Unregistered subtype extensions will cause an error.
+
+STIX 2.1 style extensions are supported, however.  Unregistered extension
+objects are passed through without error, with the exception that
+spec-defined common properties are still checked (e.g. version timestamps,
+STIX ID, etc).  Unregistered property extensions allow arbitrary properties.
+
+
 ## <a id="maintainers">Maintainers</a>
 
 TC Open Repository [Maintainers](https://www.oasis-open.org/resources/open-repositories/maintainers-guide) are responsible for oversight of this project's community development activities, including evaluation of GitHub [pull requests](https://github.com/oasis-open/<repoName>/blob/master/CONTRIBUTING.md#fork-and-pull-collaboration-model) and [preserving](https://www.oasis-open.org/policies-guidelines/open-repositories#repositoryManagement) open source principles of openness and fairness. Maintainers are recognized and trusted experts who serve to implement community goals and consensus design preferences.
