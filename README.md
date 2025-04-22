@@ -64,10 +64,10 @@ err := json.Unmarshal([]byte(
 ), &indicator)
 ```
 
-Being a map, the Go standard library already knows how to serialize it to
-a JSON object.  Instances of special types which the cleaning process puts
-into the map have custom JSON serialization included with this library.
-So one can dump to JSON using standard APIs as usual:
+Being a map, the Go standard library already knows how to serialize a
+`STIXObject` to a JSON object.  Instances of special types which the
+cleaning process puts into the map have custom JSON serialization included
+with this library.  So one can dump to JSON using standard APIs as usual:
 
 ```go
 // assuming import "encoding/json"
