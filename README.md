@@ -80,7 +80,7 @@ STIX 2.0 style "custom" content is not supported.  This means that it is
 not possible to add arbitrary custom top-level properties to a registered
 object type, in the absence of a toplevel property extension.  Additional
 2.0 style markings can't be registered (tlp 1.0 and statement markings are
-supported).  Unregistered subtype extensions will cause an error.
+supported).
 
 STIX 2.1 style extensions are supported, however.  Unregistered extension
 objects are passed through without error, with the exception that
