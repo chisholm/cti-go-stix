@@ -87,7 +87,7 @@ objects are passed through without error, with the exception that
 spec-defined common properties are still checked (e.g. version timestamps,
 STIX ID, etc).  Unregistered property extensions allow arbitrary properties.
 
-## Patterning
+### Patterning
 
 This module includes an ANTLR generated parser for the STIX Patterning grammar, and a simplified API to parse a pattern.  The generated code is the `stix2/patternParser` package.  Convenience API for STIX Patterning is found in the `stix2/utils` package.
 
