@@ -14,7 +14,7 @@ As documented in [CONTRIBUTING](https://github.com/oasis-open/cti-go-stix/blob/m
 
 OASIS Go STIX API: a repository containing the MVP implementation of Go STIX APIs
 
-## Simple Usage
+## Usage
 
 A STIX object is a Go map.  The Go type is named `STIXObject` and is based
 on a `map[string]any`.  To invoke validation from another map, one can call
@@ -87,6 +87,15 @@ objects are passed through without error, with the exception that
 spec-defined common properties are still checked (e.g. version timestamps,
 STIX ID, etc).  Unregistered property extensions allow arbitrary properties.
 
+## Patterning
+
+This module includes an ANTLR generated parser for the STIX Patterning grammar, and a simplified API to parse a pattern.  The generated code is the `stix2/patternParser` package.  Convenience API for STIX Patterning is found in the `stix2/utils` package.
+
+## STIX 2 Technical Specification Support
+
+This version of cti-go-stix brings support to STIX Version 2.1 published on 10 June 2021 currently at the Committee Specification (CS) 03 level, also known as the "OASIS Standard".
+
+The stix2 Go library does not currently support older versions of the STIX 2 Technical Specification.
 
 ## <a id="maintainers">Maintainers</a>
 
